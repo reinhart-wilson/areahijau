@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/perbandingan.css">
+    <script src="/js/perbandingan.js" defer></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <article id="container-top">
+        <div class="container" id="menu-left">
+            <form class="box" id='form-search' >
+                <h2>Pencarian</h2>
+                <label for="search-kelurahan">Kelurahan</label>
+                <select name="kelurahan" id="search-kelurahan">
+                    <option value="" disabled selected>-- Pilih Kelurahan --</option>
+                    <% for(const row of kelurahans) { %>
+                        <option value="<%= row.idKelurahan %>"><%= row.namaKelurahan %></option>
+                    <% } %>
+                </select>
+        
+                <label for="search-tahun-1">Tahun</label>
+                <select name="tahun-1" id="search-tahun-1" disabled="true">
+                    <option value="" disabled selected>-- Pilih Tahun --</option>
+                    <% for(let i = 2015; i< 2023;i++) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                </select>
+
+                <select name="tahun-2" id="search-tahun-2" disabled="true">
+                    <option value="" disabled selected>-- Pilih Tahun --</option>
+                    <% for(let i = 2015; i< 2023;i++) { %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                </select>
+
+                <input name="submit" type="submit" disabled="true">
+            </form>
+
+            <div class="box" id='detail'>
+                <h2>Detail</h2>
+                <p>Kelurahan: <span id="detail-kelurahan"></span></p>
+                <p>Luas Area Hijau: <span id="detail-luas"></span></p>
+                <p>Perubahan Area Hijau: <span id="detail-perubahan"></span></p>
+            </div>
+        </div>
+    
+        <div class="box" id="container-map"></div>
+    </article>
+
+    <article id="art-graph" class="box">
+        <canvas id="canvas-chart" width="200"></canvas>
+    </article>
+    
+    <div id="overlay" class="hidden">
+        <div id="popup-loading">
+            <h2>Loading...</h2>
+        </div>
+    </div>
+</body>
+
+</html>
