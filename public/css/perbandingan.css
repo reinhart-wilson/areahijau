@@ -20,9 +20,12 @@ body {
     margin-right: 0.5rem;
 }
 
-#container-map {
+#container-right {
     box-sizing: border-box;
     width: 75%;
+
+    display: grid;
+    grid-template-columns: auto 25%;
 }
 
 #form-search {
@@ -63,4 +66,81 @@ input[type="submit"] {
 
 .hidden {
     display: none;
+}
+
+#container-map canvas{
+    position: absolute;
+}
+
+#canvas-kurang {
+    z-index: 4;
+}
+
+#canvas-changes {
+    z-index: 3;
+}
+
+#canvas-tahun2 {
+    z-index: 1;
+}
+
+#canvas-tahun1 {
+    z-index: 2;
+}
+
+#canvas-basic {
+    z-index: 0;
+}
+
+#container-toggle {
+    grid-column-start: 2;
+
+}
+
+
+#container-map {
+    grid-column-start: 1;
+    position: relative;
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: 10% auto;
+    row-gap: 0.5em;
+    column-gap: 0.3em;
+}
+
+.form-group span:first-child {
+    grid-column: 1 / span 2;
+}
+
+.form-group label {
+    grid-column: 2 / span 1;
+}
+
+.form-group input {
+    grid-column: 1 / span 1;
+}
+
+.superscript {
+    vertical-align: super;
+    font-size: smaller;
+}
+
+.color-box{
+    width: 1.2vw;
+    height: 1.2vw;
+}
+
+.form-group span {
+    grid-column: 2 / span 1;
+}
+
+.form-group .color-box {
+    grid-column: 1 / span 1;
+    margin: auto;
+}
+
+#container-toggle {
+    margin-left: 1vw;
 }

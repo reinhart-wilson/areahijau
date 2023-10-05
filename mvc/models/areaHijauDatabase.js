@@ -37,11 +37,48 @@ export default class areaHijauDatabase {
         };
     };
 
-    // Mengambil data kelurahan-kelurahan dari database
-    getKelurahan = async () => {
-        const queryStr = 'CALL sp_getKelurahan();'
+    // Mengambil data provinsi-provinsi dari database
+    getProvinsi = async () => {
+        const queryStr = 'CALL sp_getProvinsis();'
         try {
-            return await this.execQuery(queryStr);
+            const res = await this.execQuery(queryStr);
+            return res[0]
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    };
+
+    // Mengambil data kota-kota dari database
+    getKota = async (idProvinsi) => {
+        const queryStr = 'CALL sp_getKotasByProvinsi(?);'
+        try {
+            const res = await this.execQuery(queryStr, [idProvinsi]);
+            return res[0]
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    };
+
+    // Mengambil data kecamatan-kecamatan dari database
+    getKecamatan = async (idKota) => {
+        const queryStr = 'CALL sp_getKecamatansByKota(?);'
+        try {
+            const res = await this.execQuery(queryStr, [idKota]);
+            return res[0]
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    };
+
+    // Mengambil data kelurahan-kelurahan dari database
+    getKelurahan = async (idKecamatan) => {
+        const queryStr = 'CALL sp_getKelurahansByKecamatan(?);'
+        try {
+            const res = await this.execQuery(queryStr, [idKecamatan]);
+            return res[0]
         } catch (error) {
             console.error(error);
             throw error;
@@ -56,7 +93,7 @@ export default class areaHijauDatabase {
      * @param {*} tahun 
      * @returns list of objects berisi hasil query dengan key idKelurahan dan pathLokasi
      */
-    getMapFilePath = async(idKelurahan, tahun) => {
+    getMapFilePath = async (idKelurahan, tahun) => {
         const queryStr = 'CALL sp_getMapFile(?,?);'
         try {
             const result = await this.execQuery(queryStr, [idKelurahan, tahun])
@@ -67,7 +104,7 @@ export default class areaHijauDatabase {
         };
     }
 
-    getYears =  async(idKelurahan) => {
+    getYears = async (idKelurahan) => {
         const queryStr = 'CALL sp_getYears(?);'
         try {
             const result = await this.execQuery(queryStr, [idKelurahan])
@@ -78,7 +115,7 @@ export default class areaHijauDatabase {
         };
     }
 
-    getLuas =  async(idKelurahan) => {
+    getLuas = async (idKelurahan) => {
         const queryStr = 'CALL sp_getLuas(?);'
         try {
             const result = await this.execQuery(queryStr, [idKelurahan])

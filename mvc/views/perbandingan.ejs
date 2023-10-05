@@ -17,31 +17,43 @@
 </head>
 
 <body>
-    <article id="container-top">
+    <div id="container-top">
         <div class="container" id="menu-left">
-            <form class="box" id='form-search' >
+            <form class="box" id='form-search'>
                 <h2>Pencarian</h2>
-                <label for="search-kelurahan">Kelurahan</label>
-                <select name="kelurahan" id="search-kelurahan">
-                    <option value="" disabled selected>-- Pilih Kelurahan --</option>
-                    <% for(const row of kelurahans) { %>
-                        <option value="<%= row.idKelurahan %>"><%= row.namaKelurahan %></option>
-                    <% } %>
+
+                <label for="search-provinsi">Provinsi</label>
+                <select name="provinsi" id="search-provinsi">
+                    <option value="" disabled selected>-- Pilih Provinsi --</option>
+                    <% for(const row of provinsis) { %>
+                        <option value="<%= row.idProvinsi %>">
+                            <%= row.namaProvinsi %>
+                        </option>
+                        <% } %>
                 </select>
-        
+
+                <label for="search-kota">Kota</label>
+                <select name="kota" id="search-kota" disabled>
+                    <option value="" disabled selected>-- Pilih Kota --</option>
+                </select>
+
+                <label for="search-kecamatan">Kecamatan</label>
+                <select name="kecamatan" id="search-kecamatan" disabled>
+                    <option value="" disabled selected>-- Pilih Kecamatan --</option>
+                </select>
+
+                <label for="search-kelurahan">Kelurahan</label>
+                <select name="kelurahan" id="search-kelurahan" disabled>
+                    <option value="" disabled selected>-- Pilih Kelurahan --</option>
+                </select>
+
                 <label for="search-tahun-1">Tahun</label>
                 <select name="tahun-1" id="search-tahun-1" disabled="true">
                     <option value="" disabled selected>-- Pilih Tahun --</option>
-                    <% for(let i = 2015; i< 2023;i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                    <% } %>
                 </select>
 
                 <select name="tahun-2" id="search-tahun-2" disabled="true">
                     <option value="" disabled selected>-- Pilih Tahun --</option>
-                    <% for(let i = 2015; i< 2023;i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                    <% } %>
                 </select>
 
                 <input name="submit" type="submit" disabled="true">
@@ -50,18 +62,83 @@
             <div class="box" id='detail'>
                 <h2>Detail</h2>
                 <p>Kelurahan: <span id="detail-kelurahan"></span></p>
-                <p>Luas Area Hijau: <span id="detail-luas"></span></p>
+                <p>Luas Area Hijau Tahun <span class="span-tahun1">1</span>: <span id="detail-luas1"></span></p>
+                <p>Luas Area Hijau Tahun <span class="span-tahun1">2</span>: <span id="detail-luas2"></span></p>
                 <p>Perubahan Area Hijau: <span id="detail-perubahan"></span></p>
             </div>
         </div>
-    
-        <div class="box" id="container-map"></div>
-    </article>
+
+        <div class="box" id="container-right">
+            <div class="" id="container-map">
+                <canvas class="map" id="canvas-basic" width="800" height="600"></canvas>
+                <canvas class="map" id="canvas-tahun1" width="800" height="600"></canvas>
+                <canvas class="map" id="canvas-tahun2" width="800" height="600"></canvas>
+                <canvas class="map" id="canvas-changes" width="800" height="600"></canvas>
+                <canvas class="map" id="canvas-kurang" width="800" height="600"></canvas>
+            </div>
+
+            <div id="container-toggle">
+                <form>
+                    <!-- <div class="form-group">
+                        <span class="data">Warna Peta</span>
+                        <input type="radio" name="toggle-warna" id="radio-rgb">
+                        <label for="radio-rgb">RGB</label>
+                        <input type="radio" name="toggle-warna" id="radio-putih">
+                        <label for="radio-putih">Putih</label>
+                      </div> -->
+
+                    <div class="form-group">
+                        <span class="data">Area Hijau yang Ditampilkan:</span>
+
+                        <input type="radio" name="toggle-tahun" id="radio-tahun1" checked="checked">
+                        <label for="radio-tahun1">Area hijau tahun <span class="span-tahun1">1</span></label>
+                        <input type="radio" name="toggle-tahun" id="radio-tahun2">
+                        <label for="radio-tahun2">Area hijau tahun <span class="span-tahun2">2</span></label>
+                        <input type="radio" name="toggle-tahun" id="radio-tahunnone">
+                        <label for="radio-tdk">Tidak ada</label>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 1.5em;">
+                        <span class="data">Titik Perubahan Area Hijau yang Ditampilkan:</span>
+
+                        <input type="checkbox" name="check-dot" id="radio-pos" checked="checked" >
+                        <label for="radio-pos">Pertambahan</label>
+                        <input type="checkbox" name="check-dot" id="radio-neg" checked="checked">
+                        <label for="radio-neg">Pengurangan</label>
+                    </div>
+
+                    
+
+
+                    <!-- <div class="form-group hidden">
+                        <span class="data">Tampilkan perubahan area hijau:</span>
+                        <input type="radio" name="toggle-changes" class="hidden" id="radio-ya" checked="checked">
+                        <label for="radio-ya">Ya</label>
+                        <input type="radio" name="toggle-changes" class="hidden" id="radio-tidak">
+                        <label for="radio-tidak">Tidak</label>
+                      </div> -->
+                </form>
+
+                <div class="form-group box" style="margin-top: 1.5em;">
+                    <span>Legenda: </span>
+
+                    <div class="color-box" id="legend-hijau"></div>
+                    <span>Area hijau</span>
+
+                    <div class="color-box" id="legend-tambah"></div>
+                    <span>Pertambahan area hijau</span>
+
+                    <div class="color-box" id="legend-kurang"></div>
+                    <span>Pengurangan area hijau</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <article id="art-graph" class="box">
         <canvas id="canvas-chart" width="200"></canvas>
     </article>
-    
+
     <div id="overlay" class="hidden">
         <div id="popup-loading">
             <h2>Loading...</h2>

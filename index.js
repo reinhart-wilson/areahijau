@@ -3,6 +3,7 @@ import express from "express";
 import path, { dirname } from "path";
 import areaHijauDatabase from "./mvc/models/areaHijauDatabase.js";
 import publicController from "./mvc/controllers/publicController.js";
+import adminController from "./mvc/controllers/adminController.js";
 // import * as dfd from "danfojs-node"
 // import Papa from 'papaparse';
 // import fs from 'fs'
@@ -33,12 +34,13 @@ const dbConnectOptions = {
     port: 3306,
     user: "root",
     password: "",
-    database: "areahijau",
+    database: "areahijaudb",
 };
 
 const ahdb = new areaHijauDatabase(dbConnectOptions);
 
 publicController(app, ahdb)
+adminController(app, ahdb)
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

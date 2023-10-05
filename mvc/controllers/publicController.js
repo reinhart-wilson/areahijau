@@ -1,15 +1,12 @@
-import * as reader from "../models/fileReader.js";
 import { resolve } from 'path';
-import { spawn } from 'child_process';
 import { runPython } from "../models/childProcessExecutor.js";
 
 export default (app, db) => {
     app.route("/")
         .get(async (req, res) => {
-            const kelurahans = await db.getKelurahan();
-
+            const provinsis = await db.getProvinsi();
             res.render("perbandingan", {
-                kelurahans: kelurahans[0]
+                provinsis: provinsis
             });
         });
 
@@ -23,8 +20,8 @@ export default (app, db) => {
             // Retrieve alamat file
             const data1 = await db.getMapFilePath(idKelurahan, tahun1);
             const data2 = await db.getMapFilePath(idKelurahan, tahun2);
-            const csvFilePath1 = 'public/' + data1[0].pathLokasi;
-            const csvFilePath2 = 'public/' + data2[0].pathLokasi;
+            const csvFilePath1 = 'public/' + data1[0].pathPeta;
+            const csvFilePath2 = 'public/' + data2[0].pathPeta;
 
             // Proses csv dengan child process 
             const processedCsv = await runPython(resolve("mvc/models/python/csvprocess.py"), [
@@ -38,22 +35,6 @@ export default (app, db) => {
 
             // Kirimkan hasil perhitungan
             res.send(processedCsv.trim());
-        });
-
-    app.route('/ajaxTahun')
-        .get(async (req, res) => {
-            const idKelurahan = req.query.idKelurahan;
-
-            const data = await db.getYears(idKelurahan);
-
-            // Buat list untuk dikirim ke klien
-            const years = []
-            for (const row of data) {
-                years.push(row.tahun);
-            }
-
-            // Kirim ke klien
-            res.json(years);
         });
 
     app.route('/ajaxTahun')
@@ -87,4 +68,36 @@ export default (app, db) => {
             // Kirim ke klien
             res.json(luases);
         });
+
+    app.route('/ajaxKota')
+        .get(async (req, res) => {
+            const id = req.query.idProvinsi;
+
+            const data = await db.getKota(id);
+
+            // Kirim ke klien
+            res.json(data);
+        });
+
+    app.route('/ajaxKecamatan')
+        .get(async (req, res) => {
+            const id = req.query.idKota;
+
+            const data = await db.getKecamatan(id);
+
+            // Kirim ke klien
+            res.json(data);
+        });
+
+    app.route('/ajaxKelurahan')
+        .get(async (req, res) => {
+            const id = req.query.idKecamatan;
+
+            const data = await db.getKelurahan(id);
+
+            // Kirim ke klien
+            res.json(data);
+        });
+
+
 }
