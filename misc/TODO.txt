@@ -1,11 +1,13 @@
 General User
-- Tambah menu radio + - atau keduanya / buat pixelnya luas
 
 Admin
 - Upload file
 	- Single & multi
 	- Update
 	- Delete
-- Update file
+	- Verif file
+- Verif user
+
+
 
 

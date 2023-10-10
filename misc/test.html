@@ -1,2 +1,63 @@
-<label for="colorPicker">Choose a color:</label>
-<input type="color" id="colorPicker" name="colorPicker" value="#00ff00" style="width: 30px; height: 30px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple File Upload with Preview</title>
+</head>
+<body>
+
+<form id="uploadForm" enctype="multipart/form-data">
+  <label for="fileInput">Select files:</label>
+  <input type="file" id="fileInput" name="files[]" multiple>
+  <button type="button" onclick="uploadFiles()">Upload</button>
+</form>
+
+<!-- Container to display file previews -->
+<div id="filePreviewContainer"></div>
+
+<script>
+function uploadFiles() {
+  const inputElement = document.getElementById('fileInput');
+  const files = inputElement.files;
+  const filePreviewContainer = document.getElementById('filePreviewContainer');
+  filePreviewContainer.innerHTML = ''; // Clear previous previews
+
+  if (files.length > 0) {
+    // Iterate through selected files and display previews
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileReader = new FileReader();
+
+      // Create an image element for the preview
+      const img = document.createElement('img');
+      img.classList.add('file-preview');
+
+      // Read the file and set the preview image source
+      fileReader.onload = function (e) {
+        img.src = e.target.result;
+      };
+
+      // Read the file as a data URL (base64)
+      fileReader.readAsDataURL(file);
+
+      // Append the preview image to the container
+      filePreviewContainer.appendChild(img);
+    }
+  } else {
+    console.log('No files selected.');
+  }
+}
+</script>
+
+<style>
+/* Add CSS styles for file previews */
+.file-preview {
+  max-width: 200px;
+  max-height: 200px;
+  margin: 10px;
+}
+</style>
+
+</body>
+</html>

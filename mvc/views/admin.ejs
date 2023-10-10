@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/css/perbandingan.css">
-    <script src="/js/admin.js" defer></script>
+    <script type="module" src="/js/admin.js" defer></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -16,45 +16,18 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body>
-    <form class="box" id='form-search'>
+<body> 
+    <form class="box" id='form-search' enctype="multipart/form-data" method="post" action="/admin/mapUploadMultiple">
         <h2>Tambah File</h2>
 
-        <label for="search-provinsi">Provinsi</label>
-        <select name="provinsi" id="search-provinsi">
-            <option value="" disabled selected>-- Pilih Provinsi --</option>
-            <% for(const row of provinsis) { %>
-                <option value="<%= row.idProvinsi %>">
-                    <%= row.namaProvinsi %>
-                </option>
-                <% } %>
-        </select>
+        <%- include('./searchForm.ejs'); %>
 
-        <label for="search-kota">Kota</label>
-        <select name="kota" id="search-kota" disabled>
-            <option value="" disabled selected>-- Pilih Kota --</option>
-        </select>
+        <label for="input-file">Select files:</label>
+        <input type="file" id="input-file" name="files[]" accept=".csv" multiple>
 
-        <label for="search-kecamatan">Kecamatan</label>
-        <select name="kecamatan" id="search-kecamatan" disabled>
-            <option value="" disabled selected>-- Pilih Kecamatan --</option>
-        </select>
+        <div id="container-file-path"></div>
 
-        <label for="search-kelurahan">Kelurahan</label>
-        <select name="kelurahan" id="search-kelurahan" disabled>
-            <option value="" disabled selected>-- Pilih Kelurahan --</option>
-        </select>
-
-        <label for="search-tahun-1">Tahun</label>
-        <select name="tahun-1" id="search-tahun-1" disabled="true">
-            <option value="" disabled selected>-- Pilih Tahun --</option>
-        </select>
-
-        <select name="tahun-2" id="search-tahun-2" disabled="true">
-            <option value="" disabled selected>-- Pilih Tahun --</option>
-        </select>
-
-        <input name="submit" type="submit" disabled="true">
+        <input name="btn-submit" type="submit" disabled="true">
     </form>
 </body>
 

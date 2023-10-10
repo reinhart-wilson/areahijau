@@ -1,10 +1,15 @@
 import { resolve } from 'path';
 import { runPython } from "../models/childProcessExecutor.js";
+import areaHijauDatabase from '../models/areaHijauDatabase.js';
 
+/**
+ * @param {Express} app
+ * @param {areaHijauDatabase} db
+ */
 export default (app, db) => {
     app.route("/")
         .get(async (req, res) => {
-            const provinsis = await db.getProvinsi();
+            const provinsis = await db.getProvinsis();
             res.render("perbandingan", {
                 provinsis: provinsis
             });
@@ -41,14 +46,7 @@ export default (app, db) => {
         .get(async (req, res) => {
             const idKelurahan = req.query.idKelurahan;
 
-            const data = await db.getYears(idKelurahan);
-
-            // Buat list untuk dikirim ke klien
-            const years = []
-            for (const row of data) {
-                years.push(row.tahun);
-            }
-
+            const years = await db.getYears(idKelurahan);
             // Kirim ke klien
             res.json(years);
         });
@@ -73,7 +71,7 @@ export default (app, db) => {
         .get(async (req, res) => {
             const id = req.query.idProvinsi;
 
-            const data = await db.getKota(id);
+            const data = await db.getKotasByProvinsi(id);
 
             // Kirim ke klien
             res.json(data);
@@ -83,7 +81,7 @@ export default (app, db) => {
         .get(async (req, res) => {
             const id = req.query.idKota;
 
-            const data = await db.getKecamatan(id);
+            const data = await db.getKecamatansByKota(id);
 
             // Kirim ke klien
             res.json(data);
@@ -93,7 +91,7 @@ export default (app, db) => {
         .get(async (req, res) => {
             const id = req.query.idKecamatan;
 
-            const data = await db.getKelurahan(id);
+            const data = await db.getKelurahansByKecamatan(id);
 
             // Kirim ke klien
             res.json(data);

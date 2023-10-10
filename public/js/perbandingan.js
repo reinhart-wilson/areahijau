@@ -1,15 +1,21 @@
+import utils from './utils.js';
+
 // ============================================================================
 // DOM
 
 // Kotak search
 const formSearch = document.getElementById('form-search');
-const selectTahun1 = document.getElementById('search-tahun-1');
-const selectTahun2 = document.getElementById('search-tahun-2');
-const selectKelurahan = document.getElementById('search-kelurahan');
-const selectKecamatan = document.getElementById('search-kecamatan');
-const selectProvinsi = document.getElementById('search-provinsi');
-const selectKota = document.getElementById('search-kota');
+const selectTahun1 = document.getElementById('select-tahun-1');
+const selectTahun2 = document.getElementById('select-tahun-2');
+const selectKelurahan = document.getElementById('select-kelurahan');
+const selectKecamatan = document.getElementById('select-kecamatan');
+const selectProvinsi = document.getElementById('select-provinsi');
+const selectKota = document.getElementById('select-kota');
 const submitSearch = formSearch.querySelector('input[type="submit"]');
+// Option default dari elemen select tahun
+const defYear = selectTahun1.firstElementChild.cloneNode(true);
+const defChoice = selectTahun1.firstElementChild.cloneNode(true);
+let choicesKelurahan = null;
 
 // Chart
 const canvasChart = document.getElementById('canvas-chart')
@@ -61,13 +67,10 @@ contexts = [basicContext, tambahContext, kurangContext, tahun1Context, tahun2Con
 // ============================================================================
 // Variabel lain-lain
 
-// Option default dari elemen select tahun
-const defYear = selectTahun1.firstElementChild.cloneNode(true);
-const defChoice = selectTahun1.firstElementChild.cloneNode(true);
-let choicesKelurahan = null;
+
 
 // Warna piksel peta
-let colorTambah= 'rgb(69, 224, 255)';
+let colorTambah = 'rgb(69, 224, 255)';
 let colorKurang = "red";
 let colorHijau = 'rgb(48, 117, 49)';
 const colorKelurahan = "white";
@@ -150,7 +153,7 @@ const generateGraph = (namaKelurahan, canvas, data, label) => {
         },
         title: {
           display: true,
-          text: "Perkembangan Area Hijau Kelurahan ".toUpperCase() +namaKelurahan,
+          text: "Perkembangan Area Hijau Kelurahan ".toUpperCase() + namaKelurahan,
           color: "#CD5C5C",
           font: {
             size: 24,
@@ -233,153 +236,6 @@ const generateMap = (csvData) => {
 
 
 document.addEventListener('DOMContentLoaded', async function () {
-  //
-  selectProvinsi.addEventListener('change', async (event) => {
-    submitSearch.disabled = true;
-    selectKecamatan.disabled = true;
-    selectKota.disabled = true;
-    selectKelurahan.disabled = true;
-    selectTahun1.disabled = true;
-    selectTahun2.disabled = true;
-    submitSearch.disabled = true;
-
-    const selectedChoice = event.target;
-    const selectedId = selectedChoice.value;
-
-    // AJAX get kota tersedia
-    const url = `ajaxKota?idProvinsi=${selectedId}`;
-    const response = await fetch(url);
-    const kotas = await response.json();
-
-    // Ganti opsi kota
-    selectKota.innerHTML = ""; // Hapus semua opsi
-    const defKota = defChoice.cloneNode(true);
-    defKota.innerText = "-- Pilih Kota --";
-    selectKota.appendChild(defKota); // Opsi default
-    if (kotas.length) {
-      for (let row of kotas) {
-        const newOpt = document.createElement("option");
-        newOpt.value = row.idKota;
-        newOpt.innerText = row.namaKota;
-        if (row.isKabupaten === 1) newOpt.innerText += " KABUPATEN"
-        selectKota.appendChild(newOpt);
-        selectKota.disabled = false;
-      }
-    }
-  })
-
-  // Event listener select kota
-  selectKota.addEventListener('change', async (event) => {
-    submitSearch.disabled = true;
-    selectKecamatan.disabled = true;
-    selectKelurahan.disabled = true;
-    selectTahun1.disabled = true;
-    selectTahun2.disabled = true;
-    submitSearch.disabled = true;
-
-    const selectedChoice = event.target;
-    const selectedId = selectedChoice.value;
-
-    // AJAX get kota tersedia
-    const url = `ajaxKecamatan?idKota=${selectedId}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Ganti opsi kota
-    const defSelect = defChoice.cloneNode(true); // opsi default
-    defSelect.innerText = "-- Pilih Kecamatan --";
-    selectKecamatan.innerHTML = ""; // Hapus semua opsi
-    selectKecamatan.appendChild(defSelect); // Opsi default
-    if (data.length) {
-      for (let row of data) {
-        const newOpt = document.createElement("option");
-        newOpt.value = row.idKecamatan;
-        newOpt.innerText = row.namaKecamatan;
-        selectKecamatan.appendChild(newOpt);
-        selectKecamatan.disabled = false;
-      }
-    }
-  })
-
-  // Event listener select kecamatan
-  selectKecamatan.addEventListener('change', async (event) => {
-    submitSearch.disabled = true;
-    selectKelurahan.disabled = true;
-    selectTahun1.disabled = true;
-    selectTahun2.disabled = true;
-    submitSearch.disabled = true;
-
-    const selectedChoice = event.target;
-    const selectedId = selectedChoice.value;
-
-    // AJAX get kota tersedia
-    const url = `ajaxKelurahan?idKecamatan=${selectedId}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    // Ganti opsi kota
-    const defSelect = defChoice.cloneNode(true); // opsi default
-    defSelect.innerText = "-- Pilih Kelurahan --";
-    selectKelurahan.innerHTML = ""; // Hapus semua opsi
-    selectKelurahan.appendChild(defSelect); // Opsi default
-    if (data.length) {
-      for (let row of data) {
-        const newOpt = document.createElement("option");
-        newOpt.value = row.idKelurahan;
-        newOpt.innerText = row.namaKelurahan;
-        selectKelurahan.appendChild(newOpt);
-        selectKelurahan.disabled = false;
-      }
-    }
-  })
-
-  // Tambahkan event listener ke dropdown kelurahan
-  selectKelurahan.addEventListener('change', async (event) => {
-    submitSearch.disabled = true;
-    selectTahun1.disabled = true;
-    selectTahun2.disabled = true;
-
-    const selectedChoice = event.target;
-    const selectedId = selectedChoice.value;
-
-    // AJAX get tahun-tahun tersedia
-    const url = `ajaxTahun?idKelurahan=${selectedId}`;
-    const response = await fetch(url);
-    tahuns = await response.json();
-
-    // Ganti opsi tahun
-    selectTahun1.innerHTML = ""; // Hapus semua opsi
-    selectTahun2.innerHTML = "";
-    selectTahun1.appendChild(defYear.cloneNode(true)); // Opsi default
-    selectTahun2.appendChild(defYear.cloneNode(true));
-    if (tahuns.length) {
-      for (let year of tahuns) {
-        const newOpt = document.createElement("option");
-        newOpt.value = year;
-        newOpt.innerText = year;
-        selectTahun1.appendChild(newOpt);
-        selectTahun2.appendChild(newOpt.cloneNode(true));
-      }
-    } else {
-      submitSearch.disabled = true;
-    }
-
-    // Enable dropdown tahun
-    selectTahun1.disabled = false;
-    selectTahun2.disabled = false;
-  })
-
-  // Tambahkan event listener ke dropdown tahun
-  selectTahun1.addEventListener('change', function (event) {
-    if (isYear(selectTahun1.value) & isYear(selectTahun2.value))
-      submitSearch.disabled = false;
-    else submitSearch.disabled = true;
-  });
-  selectTahun2.addEventListener('change', function (event) {
-    if (isYear(selectTahun1.value) & isYear(selectTahun2.value))
-      submitSearch.disabled = false;
-    else submitSearch.disabled = true;
-  });
 
   // Warna kotak legenda
   const legendTambah = document.getElementById("legend-tambah");
@@ -393,6 +249,104 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 // ============================================================================
 
+selectProvinsi.addEventListener('change', async (event) => {
+  submitSearch.disabled = true;
+  selectKecamatan.disabled = true;
+  selectKota.disabled = true;
+  selectKelurahan.disabled = true;
+  selectTahun1.disabled = true;
+  selectTahun2.disabled = true;
+  submitSearch.disabled = true;
+
+  const selectedChoice = event.target;
+  const selectedId = selectedChoice.value;
+
+  // AJAX get kota tersedia
+  const url = utils.URL_AJAX_KOTA + selectedId;
+  const data = await utils.requestJson(url);
+
+  // Ganti opsi kota
+  utils.fillSelectFromObjectArray(selectKota, data, 'idKota', 'namaKota');
+
+  // Enable opsi
+  selectKota.disabled = false;
+})
+
+// Event listener select kota
+selectKota.addEventListener('change', async (event) => {
+  submitSearch.disabled = true;
+  selectKecamatan.disabled = true;
+  selectKelurahan.disabled = true;
+  selectTahun1.disabled = true;
+  selectTahun2.disabled = true;
+  submitSearch.disabled = true;
+
+  const selectedChoice = event.target;
+  const selectedId = selectedChoice.value;
+
+  // AJAX get kecamatan tersedia
+  const url = utils.URL_AJAX_KECAMATAN + selectedId;
+  const data = await utils.requestJson(url);
+
+  // Ganti opsi kecamatan
+  utils.fillSelectFromObjectArray(selectKecamatan, data, "idKecamatan", "namaKecamatan");
+  selectKecamatan.disabled = false;
+})
+
+// Event listener select kecamatan
+selectKecamatan.addEventListener('change', async (event) => {
+  submitSearch.disabled = true;
+  selectKelurahan.disabled = true;
+  selectTahun1.disabled = true;
+  selectTahun2.disabled = true;
+  submitSearch.disabled = true;
+
+  const selectedChoice = event.target;
+  const selectedId = selectedChoice.value;
+
+  // AJAX get kelurahan tersedia
+  const url = utils.URL_AJAX_KELURAHAN + selectedId;
+  const data = await utils.requestJson(url);
+
+  // Ganti opsi kelurahan
+  utils.fillSelectFromObjectArray(selectKelurahan, data, "idKelurahan", "namaKelurahan");
+  selectKelurahan.disabled = false;
+})
+
+// Tambahkan event listener ke dropdown kelurahan
+selectKelurahan.addEventListener('change', async (event) => {
+  submitSearch.disabled = true;
+  selectTahun1.disabled = true;
+  selectTahun2.disabled = true;
+
+  const selectedChoice = event.target;
+  const selectedId = selectedChoice.value;
+
+  // AJAX get tahun-tahun tersedia
+  const url = utils.URL_AJAX_TAHUN + selectedId;
+  const data = await utils.requestJson(url);
+  tahuns = data.map(obj => Object.values(obj)[0]);
+
+  // Ganti opsi tahun
+  utils.fillSelectFromObjectArray(selectTahun1, data, "tahun", "tahun")
+  utils.fillSelectFromObjectArray(selectTahun2, data, "tahun", "tahun")
+
+  // Enable dropdown tahun
+  selectTahun1.disabled = false;
+  selectTahun2.disabled = false;
+})
+
+// Tambahkan event listener ke dropdown tahun
+selectTahun1.addEventListener('change', function (event) {
+  if (isYear(selectTahun1.value) & isYear(selectTahun2.value))
+    submitSearch.disabled = false;
+  else submitSearch.disabled = true;
+});
+selectTahun2.addEventListener('change', function (event) {
+  if (isYear(selectTahun1.value) & isYear(selectTahun2.value))
+    submitSearch.disabled = false;
+  else submitSearch.disabled = true;
+});
 
 formSearch.addEventListener('submit', async function (event) {
   event.preventDefault();
@@ -440,11 +394,11 @@ formSearch.addEventListener('submit', async function (event) {
   tbPerubahan.appendChild(squared.cloneNode(true));
 
   //
-  for (let elem of spansTahun1){
+  for (let elem of spansTahun1) {
     elem.innerText = tahun1;
   }
 
-  for (let elem of spansTahun2){
+  for (let elem of spansTahun2) {
     elem.innerText = tahun2;
   }
 });

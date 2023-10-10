@@ -1,0 +1,25 @@
+<label for="select-provinsi">Provinsi</label>
+<select name="provinsi" id="select-provinsi">
+    <option value="" disabled selected>-- Pilih Provinsi --</option>
+    <% for(const row of provinsis) { %>
+        <option value="<%= row.idProvinsi %>">
+            <%= row.namaProvinsi %>
+        </option>
+        <% } %>
+</select>
+
+<label for="select-kota">Kota</label>
+<select name="kota" id="select-kota" disabled>
+    <option value="" disabled selected>-- Pilih Kota --</option>
+</select>
+
+<label for="select-kecamatan">Kecamatan</label>
+<select name="kecamatan" id="select-kecamatan" disabled>
+    <option value="" disabled selected>-- Pilih Kecamatan --</option>
+</select>
+
+<label for="select-kelurahan">Kelurahan</label>
+<select name="kelurahan" id="select-kelurahan" disabled>
+    <option value="" disabled selected>-- Pilih Kelurahan --</option>
+</select>
+
