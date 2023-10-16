@@ -25,8 +25,8 @@ export default (app, db) => {
             // Retrieve alamat file
             const data1 = await db.getMapFilePath(idKelurahan, tahun1);
             const data2 = await db.getMapFilePath(idKelurahan, tahun2);
-            const csvFilePath1 = 'public/' + data1[0].pathPeta;
-            const csvFilePath2 = 'public/' + data2[0].pathPeta;
+            const csvFilePath1 = data1[0].pathPeta;
+            const csvFilePath2 = data2[0].pathPeta;
 
             // Proses csv dengan child process 
             const processedCsv = await runPython(resolve("mvc/models/python/csvprocess.py"), [

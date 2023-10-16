@@ -1,0 +1,20 @@
+.file-row {
+    display: grid;
+    grid-template-columns: 20% 20% 20% auto;
+    margin-top: 2vh;
+}
+
+.file-row span:first-child {
+    grid-column: 1/ span 1;
+}
+
+.file-row span:nth-child(2) {
+    grid-column: 2/ span 1;
+    text-align: right;
+    margin-right: 0.5em;
+}
+
+.file-row input {
+    grid-column: 3/ span 1;
+}
+

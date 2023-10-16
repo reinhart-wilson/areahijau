@@ -198,5 +198,27 @@ export default class areaHijauDatabase {
         };
     }
 
-
+    /**
+     * 
+     * @param {Number} idKelurahan 
+     * @param {Number} tahun 
+     * @param {Number} luas 
+     * @param {String} pathPenyimpanan 
+     * @returns 
+     */
+    updateAreaHijau = async (idKelurahan, tahun, luas, pathPenyimpanan) => {
+        const queryStr = 'CALL sp_updAreaHijau(?, ?, ?, ?);'
+        try {
+            const result = await this.execQuery(queryStr, [
+                idKelurahan, 
+                tahun, 
+                luas,
+                pathPenyimpanan
+            ])
+            return result[0];
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    }
 }

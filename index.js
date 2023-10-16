@@ -6,7 +6,7 @@ import publicController from "./mvc/controllers/publicController.js";
 import adminController from "./mvc/controllers/adminController.js";
 // import * as dfd from "danfojs-node"
 // import Papa from 'papaparse';
-// import fs from 'fs'
+// 
 // import csv from 'csv-parser'
 
 const app = express();
@@ -47,3 +47,6 @@ adminController(app, ahdb)
 app.listen(PORT, () => {
     console.log("Server ready");
 });
+
+import { runPython } from "./mvc/models/childProcessExecutor.js";
+

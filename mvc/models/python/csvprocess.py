@@ -1,6 +1,5 @@
 import sys
 import pandas as pd
-from io import StringIO
 
 # Fungsi untuk menambahkan kolom warna berdasarkan kriteria
 # 0 = tanaman, 1 = bukan tanaman, -1 = di luar batas
@@ -18,8 +17,8 @@ def add_color(row):
         return 'g'
 
 # Baca argumen yang di-pass
-csvpath1 = sys.argv[1];
-csvpath2 = sys.argv[2];
+csvpath1 = sys.argv[1]
+csvpath2 = sys.argv[2]
 
 df1 = pd.read_csv(csvpath1, sep=",")
 df2 = pd.read_csv(csvpath2, sep=",")

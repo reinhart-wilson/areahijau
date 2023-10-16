@@ -72,6 +72,30 @@ const utils = (function () {
         return json;
     }
 
+
+    function extractYear(inputString) {
+        const yearRegex = /(?:20|19)\d{2}/;
+        const match = inputString.match(yearRegex);
+        
+        return match ? match[0] : null;
+    }
+
+    const sendToServer = async (data, path, contentType) => {
+        const options = {
+            method: "post",
+            body: data,
+        };
+    
+        if (contentType != null) {
+            options["headers"] = {
+                "Content-Type": contentType,
+            };
+        }
+    
+        const response = await fetch(path, options);
+        return response;
+    };
+
     // Object dengan fungsi dan atribut statis
     return {
         URL_AJAX_KOTA: URL_AJAX_KOTA,
@@ -81,7 +105,9 @@ const utils = (function () {
 
         fillSelectFromObjectArray,
         requestJson,
-        removeAllChildren
+        removeAllChildren,
+        extractYear,
+        sendToServer
     };
 })();
 
