@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link rel="stylesheet" href="/css/Login.css">
+    <script src="/js/adminLogin.js" type="module" defer></script>
+</head>
+<body>
+    <div class="kotak_login">
+		<p class="tulisan_login">Log In</p>
+ 
+		<form id="login-form" method="post" action="/login">
+			<input type="text" name="username" class="form_login" placeholder="USERNAME">
+ 
+			<input type="password" name="password" class="form_login" placeholder="PASSWORD">
+            
+            <br><br>
+            <% if (validationError) { %>
+                <div class="form-error">Invalid username or password</div>
+            <% } %>
+            
+			<input type="submit" class="tombol_login" value="SUBMIT">
+ 
+		</form>
+		
+	</div>
+</body>
+</html>

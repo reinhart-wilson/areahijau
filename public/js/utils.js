@@ -96,6 +96,21 @@ const utils = (function () {
         return response;
     };
 
+
+    const emailIsValid = (email) => {
+        return email.match(
+            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    }
+    
+    const is8Chars = (st) => {
+        if (st.length >= 8) {
+            return true;
+        }
+        return false;
+    }
+    
+
     // Object dengan fungsi dan atribut statis
     return {
         URL_AJAX_KOTA: URL_AJAX_KOTA,
@@ -107,7 +122,9 @@ const utils = (function () {
         requestJson,
         removeAllChildren,
         extractYear,
-        sendToServer
+        sendToServer,
+        emailIsValid,
+        is8Chars
     };
 })();
 

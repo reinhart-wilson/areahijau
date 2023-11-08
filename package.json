@@ -16,7 +16,10 @@
     "nodemon": "^2.0.22"
   },
   "dependencies": {
+    "argon2": "^0.31.1",
+    "crypto": "^1.0.1",
     "csv-parser": "^3.0.0",
+    "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",

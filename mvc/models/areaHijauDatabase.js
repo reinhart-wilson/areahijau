@@ -210,8 +210,8 @@ export default class areaHijauDatabase {
         const queryStr = 'CALL sp_updAreaHijau(?, ?, ?, ?);'
         try {
             const result = await this.execQuery(queryStr, [
-                idKelurahan, 
-                tahun, 
+                idKelurahan,
+                tahun,
                 luas,
                 pathPenyimpanan
             ])
@@ -219,6 +219,46 @@ export default class areaHijauDatabase {
         } catch (error) {
             console.error(error);
             throw error;
+
         };
     }
+
+    addAdmin = async (nama, email, username, password, salt) => {
+        const queryStr = 'CALL sp_addAdmin(?, ?, ?, ?, ?);'
+        try {
+            const result = await this.execQuery(queryStr, [
+                nama,
+                email,
+                username,
+                password,
+                salt
+            ])
+            return result[0];
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    }
+
+    getAdminCredentials = async (username) => {
+        const queryStr = 'CALL sp_getAdminCredentials (?);'
+        try {
+            const result = await this.execQuery(queryStr, [username])
+            return result[0];
+        } catch (error) {
+            console.error(error);
+            throw error;
+        };
+    }
+
+    // getAdminInfo = async (username) => {
+    //     const queryStr = 'CALL sp_getAdminCredentials (?);'
+    //     try {
+    //         const result = await this.execQuery(queryStr, [username])
+    //         return result[0];
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     };
+    // }
 }

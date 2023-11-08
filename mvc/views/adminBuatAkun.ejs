@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Akun</title>
+    <link rel="stylesheet" href="/fontawesome/css/all.css">
+    <link rel="stylesheet" href="/css/Admin.css">
+    <link rel="stylesheet" href="/css/adminBuatAkun.css">
+    <link rel="stylesheet" href="/css/perbandingan.css"> <!-- Hapus kalau sudah, untuk prototyping saja -->
+    <script type="module"  src="/js/adminBuatAkun.js" defer></script>
+    <script type="module"  src="/js/logout.js" defer></script>
+</head>
+
+<body>
+
+    <main>
+        <article class="box">
+            <h2 id="article-title">Tambah Akun Admin</h2>
+            <form id="login-form" method="post" action="/admin/buatAkun">
+                <label for="nama">Nama : </label>
+                <input type="text" name="nama" class="form_login">
+
+                <label for="username">Username : </label>
+                <input type="text" name="username" class="form_login">
+
+                <label for="password">Password : </label>
+                <input type="password" name="password" class="form_login">
+
+                <label for="email">Email :</label>
+                <input type="email" name="email" class="form_login">
+
+                <input type="submit" class="tombol_login" value="Save">
+            </form>
+        </article>
+
+        <button class="btn-logout">Logout</button>
+    </main>
+</body>
+
+</html>

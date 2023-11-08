@@ -1,13 +1,10 @@
 import bodyparser from "body-parser";
 import express from "express";
-import path, { dirname } from "path";
+import path from "path";
 import areaHijauDatabase from "./mvc/models/areaHijauDatabase.js";
 import publicController from "./mvc/controllers/publicController.js";
 import adminController from "./mvc/controllers/adminController.js";
-// import * as dfd from "danfojs-node"
-// import Papa from 'papaparse';
-// 
-// import csv from 'csv-parser'
+import session from "express-session";
 
 const app = express();
 const PORT = 8080;
@@ -15,9 +12,22 @@ const PORT = 8080;
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 app.use(express.static(path.resolve("public")));
-
 app.use(express.json());
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(
+    session({
+        cookie: {
+            httpOnly: false,
+            samesite: "strict",
+            maxAge: 2 * 60 * 60 * 1000,
+        },
+        // store: sessionStore,
+        name: "SID",
+        secret: "topsecret",
+        resave: false,
+        saveUninitialized: false,
+    })
+);
 
 app.set("view engine", "ejs");
 
@@ -48,5 +58,4 @@ app.listen(PORT, () => {
     console.log("Server ready");
 });
 
-import { runPython } from "./mvc/models/childProcessExecutor.js";
 
