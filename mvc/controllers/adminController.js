@@ -12,9 +12,19 @@ import argon2 from "argon2";
  */
 export default (app, db) => {
 
-    const mapPath = resolve("./public/maps/")
-    const mapPathRel = "./public/maps/"
-    const mapTempPath = resolve("./tempmap");
+    const mapPath = resolve("./private/maps/")
+    const mapPathRel = "./private/maps/"
+    const mapTempPath = resolve("./private/tempmap");
+
+    // Middleware untuk handle error
+    app.use((err, req, res, next) => {
+        console.log('tru');
+        if (err.code === 'FILE_FILTER_ERROR') {
+            res.status(400).send(err.message);
+        } else {
+            res.status(500).send('Internal Server Error');
+        }
+    });
 
     // Setting tempat penyimpanan multer
     const storage = multer.diskStorage({
@@ -40,18 +50,19 @@ export default (app, db) => {
 
     // Setting upload multer
     const fileFilter = (req, file, cb) => {
-        let isValid = false;
 
         // Periksa ektensi file, jika csv maka valid.
-        if (path.extname(file.originalname).toLowerCase() === '.csv') {
-            isValid = true;
+        if (!(path.extname(file.originalname).toLowerCase() === '.csv')) {
+            req.fileValidationError = "Tipe file terlarang";
+            return cb(null, false, req.fileValidationError);
         }
 
-        if (isValid) {
-            cb(null, true);
-        } else {
-            cb(new Error(''));
+        if (!extractYear(file.originalname)) {
+            req.fileValidationError = "Kesalahan nama";
+            return cb(null, false, req.fileValidationError);
         }
+
+        cb(null, true);
     };
 
     const upload = multer({
@@ -123,6 +134,24 @@ export default (app, db) => {
         return match ? match[0] : null;
     }
 
+    function deleteFiles(req) {
+        if (req.files) {
+            req.files.forEach(file => {
+                const filePath = file.path;
+
+                // Hapus file dari file system
+                fs.unlink(filePath, err => {
+                    if (err) {
+                        console.error('Error deleting file:', filePath, err);
+                    } else {
+                        console.log('File deleted:', filePath);
+                    }
+                });
+            });
+            req.files = [];
+        }
+    }
+
     // ========================================================================
 
     app.route("/admin")
@@ -137,6 +166,11 @@ export default (app, db) => {
     app.route("/admin/mapUploadMultiple")
         .all(auth())
         .post(upload.any(), async (req, res) => {
+            if (req.fileValidationError) {
+                deleteFiles(req);
+                return res.status(400).send(req.fileValidationError);
+            }
+
             // ================================================================
             // Membuat Direktori penyimpanan permanen file
 
@@ -173,9 +207,9 @@ export default (app, db) => {
             // Proses file yang terupload dengan python
             if (req.files || req.files.length > 0) {
                 const pyPath = resolve('mvc/models/python/csvpreprocess.py');
-                console.log(pyPath);
 
                 const uploadedFiles = []
+                let allFilesOK = true;
                 for (const uploadedFile of req.files) {
                     const filePath = uploadedFile.path;
                     const greenPx = await runPython(pyPath, [ //Hasil dari child process ini adalah int jika kolom valid, dan string 'INVALID' jika kolom tak sesuai
@@ -189,6 +223,7 @@ export default (app, db) => {
                         fs.rename(filePath, destinationFilePath, async (err) => {
                             if (err) {
                                 console.error('Error:', err);
+                                allFilesOK = false;
                             } else {
                                 const storPath = path.join(mapPathRel, namaNegara, namaProvinsi,
                                     namaKota, namaKecamatan, namaKelurahan, (year + ".csv"))
@@ -199,19 +234,21 @@ export default (app, db) => {
                                     await db.updateAreaHijau(idKelurahan, year, greenPx * 100,
                                         storPath);
                                     uploadedFiles.push(uploadedFile.originalname);
-                                    console.log('File telah dipindahkan!');
                                 } catch (error) {
                                     console.log(error);
+                                    return res.status(500).json({ error: 'Internal Server Error' });
                                 }
                             }
                         });
-                    }
+                    } else allFilesOK = false;
                 }
+                if (!allFilesOK) deleteFiles(req);
                 res.status(200).json({
                     message: 'File berhasil diupload',
                     files: uploadedFiles
                 });
             } else {
+                deleteFiles(req);
                 res.status(500).json({ error: 'Internal Server Error' });
             }
 

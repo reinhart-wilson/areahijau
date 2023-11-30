@@ -22,24 +22,27 @@ export default (app, db) => {
             const tahun1 = req.query.tahun1;
             const tahun2 = req.query.tahun2;
 
-            // Retrieve alamat file
-            const data1 = await db.getMapFilePath(idKelurahan, tahun1);
-            const data2 = await db.getMapFilePath(idKelurahan, tahun2);
-            const csvFilePath1 = data1[0].pathPeta;
-            const csvFilePath2 = data2[0].pathPeta;
+            if (idKelurahan && tahun1 && tahun2) {
+                // Retrieve alamat file
+                const data1 = await db.getMapFilePath(idKelurahan, tahun1);
+                const data2 = await db.getMapFilePath(idKelurahan, tahun2);
+                const csvFilePath1 = data1[0].pathPeta;
+                const csvFilePath2 = data2[0].pathPeta;
 
-            // Proses csv dengan child process 
-            const processedCsv = await runPython(resolve("mvc/models/python/csvprocess.py"), [
-                resolve(csvFilePath1),
-                resolve(csvFilePath2)
-            ]);
+                // Proses csv dengan child process 
+                const processedCsv = await runPython(resolve("mvc/models/python/csvprocess.py"), [
+                    resolve(csvFilePath1),
+                    resolve(csvFilePath2)
+                ]);
 
-            // Set header untuk mengindikasikan bahwa respons adalah file CSV
-            res.setHeader('Content-Type', 'text/csv');
-            res.setHeader('Content-Disposition', 'attachment; filename="res.csv"');
+                // Set header untuk mengindikasikan bahwa respons adalah file CSV
+                res.setHeader('Content-Type', 'text/csv');
+                res.setHeader('Content-Disposition', 'attachment; filename="res.csv"');
 
-            // Kirimkan hasil perhitungan
-            res.send(processedCsv.trim());
+                // Kirimkan hasil perhitungan
+                return res.send(processedCsv.trim());
+            }
+            res.status(400);
         });
 
     app.route('/ajaxTahun')

@@ -25,10 +25,18 @@ const scrapKecKel = (idKabupaten, namaKabupaten, lastIdKecamatan) => {
             const namaKecamatan = kecamatanTd.firstElementChild.innerText;
             const kecScriptRow = `(${idKecamatan}, \'${namaKecamatan.toUpperCase()}\', ${idKabupaten}),`;
             kecScript += kecScriptRow;
-        } 
+        }
 
-        for (let kelurahanLi of kelurahansUl.children) {
-            const namaKelurahan = kelurahanLi.innerText;
+        if (kelurahansUl) {
+            for (let kelurahanLi of kelurahansUl.children) {
+                const namaKelurahan = kelurahanLi.innerText;
+                let isDesa = 0;
+                if (kelurahanType.toLowerCase() === 'desa') isDesa = 1;
+                const kelScriptRow = `(\'${namaKelurahan.toUpperCase()}\', ${isDesa}, ${idKecamatan}),`;
+                kelScript += kelScriptRow;
+            }
+        } else {
+            const namaKelurahan = kelurahansTd.firstElementChild.innerText;
             let isDesa = 0;
             if (kelurahanType.toLowerCase() === 'desa') isDesa = 1;
             const kelScriptRow = `(\'${namaKelurahan.toUpperCase()}\', ${isDesa}, ${idKecamatan}),`;
@@ -36,5 +44,40 @@ const scrapKecKel = (idKabupaten, namaKabupaten, lastIdKecamatan) => {
         }
     }
 
-    return [kecScript.slice(0,-1)+";", kelScript.slice(0,-1)+";"]
+    return {'script':[kecScript.slice(0, -1) + ";", kelScript.slice(0, -1) + ";"],
+        'lastIdKecamatan': idKecamatan}
+}
+
+// Buat daftar Kota/Kab
+const cityList = document.getElementById('mw-panel-toc-list')
+const listKotaKabupaten = []
+for (const cityLi of cityList.children) {
+    const myString = cityLi.innerText
+    const isDaerahAdmin = (myString.includes('Kabupaten') || myString.includes('Kota')) ? true : false;
+    if (isDaerahAdmin) listKotaKabupaten.push(myString);
+}
+const listKotaUnderscore = listKotaKabupaten.map(item => item.replace(/ /g, '_'));
+
+// Generate script kec kel
+let currIdKota = 1;
+let currIdKec = 0;
+const scriptsKecKel = []
+for (let strKotaUnderscore of listKotaUnderscore) {
+    const scrapRes = scrapKecKel(currIdKota, strKotaUnderscore, currIdKec);
+    const script = scrapRes['script'];
+    scriptsKecKel.push(script.join(''))
+    currIdKota ++;
+    currIdKec = scrapRes['lastIdKecamatan'];
+}
+
+
+// Generate script kab kota
+currIdKota = 1;
+let scriptsKota = "INSERT INTO kota (idKota, namaKota, isKabupaten, idProvinsi) VALUES ";
+for (let strKota of listKotaKabupaten){
+    const namaKota = strKota.replace(/^(Kota |Kabupaten )/i, '');
+    let isKabupaten = strKota.includes('Kabupaten') ? 1 : 0;  
+    const kotaScriptRow = `(${currIdKota},\'${namaKota.toUpperCase()}\', ${isKabupaten}, 1),`;
+    scriptsKota += kotaScriptRow;
+    currIdKota ++;
 }

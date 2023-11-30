@@ -5,12 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>HijauID</title>
     <link rel="stylesheet" href="/css/perbandingan.css">
+    <link rel="stylesheet" href="/css/banner.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+    <script src="https://kit.fontawesome.com/6c886108a2.js" crossorigin="anonymous"></script> <!-- fontawesome -->
     <script type="module" src="/js/perbandingan.js" defer></script>
     <script type="module" src="/js/utils.js" defer></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script> -->
@@ -18,10 +21,14 @@
 </head>
 
 <body>
+    <%- include('./banner.ejs'); %>
+
     <div id="container-top">
         <div class="container" id="menu-left">
             <form class="box" id='form-search'>
-                <h2>Pencarian</h2>
+                <h2>DATA PETA</h2>
+
+                <div class="sep-content"></div>
 
                 <%- include('./searchForm.ejs'); %>
 
@@ -34,36 +41,37 @@
                     <option value="" disabled selected>-- Pilih Tahun --</option>
                 </select>
 
-                <input name="submit" type="submit" disabled="true">
+                <input name="submit" class="btn-decorated" type="submit" value="TAMPILKAN" disabled="true">
             </form>
 
             <div class="box" id='detail'>
-                <h2>Detail</h2>
+                <h2>DETAIL KELURAHAN</h2>
+                <div class="sep-content"></div>
                 <p>Kelurahan: <span id="detail-kelurahan"></span></p>
-                <p>Luas Area Hijau Tahun <span class="span-tahun1">1</span>: <span id="detail-luas1"></span></p>
-                <p>Luas Area Hijau Tahun <span class="span-tahun1">2</span>: <span id="detail-luas2"></span></p>
-                <p>Perubahan Area Hijau: <span id="detail-perubahan"></span></p>
+                <p>Luas Area Hijau:
+                    <ul>
+                        <li>Tahun <span class="span-tahun1">1</span>: <span id="detail-luas1"></span></p></li>
+                        <li>Tahun <span class="span-tahun1">2</span>: <span id="detail-luas2"></span></p></li>
+                        <li>Perubahan : <span id="detail-perubahan"></span></li>
+                    </ul>                 
             </div>
         </div>
 
         <div class="box" id="container-right">
-            <div class="" id="container-map">
-                <canvas class="map" id="canvas-basic" width="800" height="600"></canvas>
-                <canvas class="map" id="canvas-tahun1" width="800" height="600"></canvas>
-                <canvas class="map" id="canvas-tahun2" width="800" height="600"></canvas>
-                <canvas class="map" id="canvas-changes" width="800" height="600"></canvas>
-                <canvas class="map" id="canvas-kurang" width="800" height="600"></canvas>
+            <h2>PETA AREA HIJAU</h2>
+            <div class="sep-content"></div>
+            <div class="container-zoom" id="container-zoom-map">
+                <div class="placeholder">
+                    <i class="fa-regular fa-image" ></i>
+                    <p>Isi data peta dan klik tombol tampilkan untuk melihat peta.</p>
+                </div>
+                <div class="" id="container-map">                    
+                </div>
             </div>
+            
 
             <div id="container-toggle">
                 <form>
-                    <!-- <div class="form-group">
-                        <span class="data">Warna Peta</span>
-                        <input type="radio" name="toggle-warna" id="radio-rgb">
-                        <label for="radio-rgb">RGB</label>
-                        <input type="radio" name="toggle-warna" id="radio-putih">
-                        <label for="radio-putih">Putih</label>
-                      </div> -->
 
                     <div class="form-group">
                         <span class="data">Area Hijau yang Ditampilkan:</span>
@@ -85,20 +93,10 @@
                         <label for="radio-neg">Pengurangan</label>
                     </div>
 
-
-
-
-                    <!-- <div class="form-group hidden">
-                        <span class="data">Tampilkan perubahan area hijau:</span>
-                        <input type="radio" name="toggle-changes" class="hidden" id="radio-ya" checked="checked">
-                        <label for="radio-ya">Ya</label>
-                        <input type="radio" name="toggle-changes" class="hidden" id="radio-tidak">
-                        <label for="radio-tidak">Tidak</label>
-                      </div> -->
                 </form>
 
-                <div class="form-group box" style="margin-top: 1.5em;">
-                    <span>Legenda: </span>
+                <div class="form-group box-border" style="margin-top: 1.5em;">
+                    <h3>Legenda: </h3>
 
                     <div class="color-box" id="legend-hijau"></div>
                     <span>Area hijau</span>
@@ -113,8 +111,15 @@
         </div>
     </div>
 
-    <article id="art-graph" class="box">
-        <canvas id="canvas-chart" width="200"></canvas>
+    <article id="art-chart" class="box">
+        <h2>GRAFIK PERKEMBANGAN LUAS AREA HIJAU</h2>
+        <div class="sep-content"></div>
+        <div id="container-chart">
+            <div class="placeholder">
+                <i class="fa-regular fa-image"></i>
+                <p>Isi data peta dan klik tombol tampilkan untuk melihat grafik.</p>
+            </div>
+        </div>
     </article>
 
     <div id="overlay" class="hidden">

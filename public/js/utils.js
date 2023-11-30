@@ -41,6 +41,37 @@ const utils = (function () {
         });
     }
 
+    /**
+     * 
+     * @param {HTMLElement} selectElement 
+     * @param {Array} data 
+     */
+    function fillSelectKota(selectElement, data, valueKey, textKey) {
+
+        // Clone opsi placeholder
+        const defSelect = selectElement.firstElementChild.cloneNode(true); // opsi default
+
+        removeAllChildren(selectElement);
+
+        selectElement.appendChild(defSelect); // Opsi default
+
+        data.forEach(item => {
+            // Buat elemen option
+            const option = document.createElement('option');
+
+            // Set innertext dan value dari option
+            option.textContent = item[textKey];
+            option.value = item[valueKey];
+
+            if (item['isKabupaten'] === 1){
+                option.textContent += " KABUPATEN"
+            }
+
+            // Tambahkan option ke elemen select
+            selectElement.appendChild(option);
+        });
+    }
+
 
     /**
      * Menambahkan query string ke URL
@@ -119,6 +150,7 @@ const utils = (function () {
         URL_AJAX_TAHUN,
 
         fillSelectFromObjectArray,
+        fillSelectKota,
         requestJson,
         removeAllChildren,
         extractYear,

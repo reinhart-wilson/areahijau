@@ -18,7 +18,10 @@ const defChoice = selectTahun1.firstElementChild.cloneNode(true);
 let choicesKelurahan = null;
 
 // Chart
-const canvasChart = document.getElementById('canvas-chart')
+const canvasChart = document.createElement('canvas')
+canvasChart.setAttribute('id', 'canvas-chart')
+const containerChart = document.getElementById('container-chart')
+const divChartPlaceholder = containerChart.getElementsByClassName('placeholder')[0];
 
 // Kotak detail
 const tbKelurahan = document.getElementById('detail-kelurahan')
@@ -48,12 +51,20 @@ const radioNeg = document.getElementById('radio-neg');
 var canvases;
 var contexts;
 
-const basicCanvas = document.getElementById('canvas-basic');
-const tambahCanvas = document.getElementById('canvas-changes');
-const kurangCanvas = document.getElementById('canvas-kurang');
-const tahun1Canvas = document.getElementById('canvas-tahun1');
-const tahun2Canvas = document.getElementById('canvas-tahun2');
+const basicCanvas = document.createElement('canvas');
+basicCanvas.setAttribute('id', 'canvas-basic');
+const tambahCanvas = document.createElement('canvas');
+tambahCanvas.setAttribute('id', 'canvas-changes')
+const kurangCanvas = document.createElement('canvas');
+kurangCanvas.setAttribute('id', 'canvas-kurang')
+const tahun1Canvas = document.createElement('canvas');
+tahun1Canvas.setAttribute('id', 'canvas-tahun1')
+const tahun2Canvas = document.createElement('canvas');
+tahun2Canvas.setAttribute('id', 'canvas-tahun2')
 canvases = [basicCanvas, tambahCanvas, kurangCanvas, tahun1Canvas, tahun2Canvas];
+for (let canvas of canvases) {
+  canvas.classList.add('map')
+}
 
 const basicContext = basicCanvas.getContext('2d');
 const tambahContext = tambahCanvas.getContext('2d');
@@ -62,7 +73,8 @@ const tahun1Context = tahun1Canvas.getContext('2d');
 const tahun2Context = tahun2Canvas.getContext('2d');
 contexts = [basicContext, tambahContext, kurangContext, tahun1Context, tahun2Context]
 
-
+const containerZoom = document.getElementById('container-zoom-map')
+const divMapPlaceholder = containerZoom.getElementsByClassName('placeholder')[0];
 
 // ============================================================================
 // Variabel lain-lain
@@ -83,6 +95,7 @@ squaredText.innerText = 2;
 var reportChart; // Akan diisi elemen canvas untuk grafik. Var digunakan agar bisa bisa dihapus ketika peta berganti
 var tahuns; // Array berisi tahun-tahun yang tersedia untuk kelurahan saat ini. Dibuat global agar dapat dipakai untuk select, grafik, dan detail.
 
+let canvasIsAdded = false
 
 // ============================================================================
 // Fungsi-fungsi
@@ -167,6 +180,14 @@ const generateGraph = (namaKelurahan, canvas, data, label) => {
 
 // Fungsi untuk menggambar peta pada canvas
 const generateMap = (csvData) => {
+  divMapPlaceholder.style.display = 'none'
+  if (!canvasIsAdded) {
+    for (let canvas of canvases) {
+      containerMap.appendChild(canvas);
+    }
+    canvasIsAdded = true;
+  }
+
 
   // Tentukan koordinat maksimal untuk ukuran canvas dan buat canvas kosong
   const lastRow = csvData.data[csvData.data.length - 1];
@@ -181,12 +202,13 @@ const generateMap = (csvData) => {
     let y = csvRow.y;
     const warna = csvRow.warna
 
-    let totalBandVal = 0;
     const contextsToFill = []
 
     if (warna === 'g') {
       tahun1Context.fillStyle = colorHijau;
       tahun2Context.fillStyle = colorHijau;
+      basicContext.fillStyle = colorKelurahan
+      contextsToFill.push(basicContext);
       contextsToFill.push(tahun1Context);
       contextsToFill.push(tahun2Context);
     } else if (warna === 'w') {
@@ -195,11 +217,15 @@ const generateMap = (csvData) => {
     } else if (warna === 'b') {
       tambahContext.fillStyle = colorTambah;
       tahun2Context.fillStyle = colorHijau;
+      basicContext.fillStyle = colorKelurahan
+      contextsToFill.push(basicContext);
       contextsToFill.push(tambahContext);
       contextsToFill.push(tahun2Context);
     } else if (warna === 'r') {
       tahun1Context.fillStyle = colorHijau;
       kurangContext.fillStyle = colorKurang;
+      basicContext.fillStyle = colorKelurahan
+      contextsToFill.push(basicContext);
       contextsToFill.push(tahun1Context);
       contextsToFill.push(kurangContext);
       // perubahanLuas += 1;
@@ -208,12 +234,6 @@ const generateMap = (csvData) => {
       contextsToFill.push(basicContext);
     }
 
-
-    // Isi luas
-    // tbLuas.innerText = "" + (luasHijau * 10 * 10) + " m";
-    // tbPerubahan.innerText = "" + (perubahanLuas * 10 * 10) + " m";
-    // tbLuas.appendChild(squaredText.cloneNode(true));
-    // tbPerubahan.appendChild(squaredText.cloneNode(true));
     for (let context of contextsToFill) {
       context.fillRect(x, y, 1, 1);
     }
@@ -225,8 +245,6 @@ const generateMap = (csvData) => {
     canvas.style.width = '100%';
     canvas.style.imageRendering = 'pixelated';
   }
-
-  tahun2Canvas.classList.add('hidden');
 
   // Sembunyikan overlay
   overlay.classList.add('hidden');
@@ -266,7 +284,7 @@ selectProvinsi.addEventListener('change', async (event) => {
   const data = await utils.requestJson(url);
 
   // Ganti opsi kota
-  utils.fillSelectFromObjectArray(selectKota, data, 'idKota', 'namaKota');
+  utils.fillSelectKota(selectKota, data, 'idKota', 'namaKota');
 
   // Enable opsi
   selectKota.disabled = false;
@@ -349,6 +367,8 @@ selectTahun2.addEventListener('change', function (event) {
 });
 
 formSearch.addEventListener('submit', async function (event) {
+
+  submitSearch.blur();
   event.preventDefault();
 
   // Ambil data dari form
@@ -368,6 +388,7 @@ formSearch.addEventListener('submit', async function (event) {
       generateMap(results);
     }
   });
+  if (canvasIsAdded) resetTransform(); //reset posisi zoom peta
 
   // Request luas ke server  
   const selectedId = selectKelurahan.value;
@@ -382,16 +403,28 @@ formSearch.addEventListener('submit', async function (event) {
   tbKelurahan.innerText = selectedText;
 
   // Buat grafik
+  if (!reportChart) {
+    divChartPlaceholder.style.display = 'none'
+    containerChart.appendChild(canvasChart);
+  }
   generateGraph(selectedText, canvasChart, luases, tahuns)
 
   let luas1 = luases[tahuns.indexOf(parseInt(tahun1))];
   let luas2 = luases[tahuns.indexOf(parseInt(tahun2))];
   tbLuas.innerText = luas1 + ' m';
   tbLuas2.innerText = luas2 + ' m';
-  tbPerubahan.innerText = -1 * (parseInt(luas1) - parseInt(luas2)) + ' m';
+
+  let luasPerubahan = -1 * (parseInt(luas1) - parseInt(luas2));
+  tbPerubahan.innerText = luasPerubahan + ' m';
   tbLuas.appendChild(squared.cloneNode(true));
   tbLuas2.appendChild(squared.cloneNode(true));
   tbPerubahan.appendChild(squared.cloneNode(true));
+  console.log(Number(luasPerubahan) >= 0)
+  if (Number(luasPerubahan) >= 0) {
+    tbPerubahan.style.color = colorTambah;
+  } else {
+    tbPerubahan.style.color = colorKurang;
+  }
 
   //
   for (let elem of spansTahun1) {
@@ -427,3 +460,65 @@ radioPos.addEventListener('input', (event) => {
 radioNeg.addEventListener('input', (event) => {
   toggleVisibility(kurangCanvas)
 })
+
+var scale = 1,
+  panning = false,
+  pointX = 0,
+  pointY = 0,
+  start = { x: 0, y: 0 },
+  zoom = document.getElementById("container-map");
+
+function setTransform() {
+  zoom.style.transform = "translate(" + pointX + "px, " + pointY + "px) scale(" + scale + ")";
+}
+
+zoom.onmousedown = function (e) {
+  e.preventDefault();
+  start = { x: e.clientX - pointX, y: e.clientY - pointY };
+  panning = true;
+}
+
+zoom.onmouseup = function (e) {
+  panning = false;
+}
+
+zoom.onmousemove = function (e) {
+  e.preventDefault();
+  if (!panning) {
+    return;
+  }
+  pointX = (e.clientX - start.x);
+  pointY = (e.clientY - start.y);
+  setTransform();
+}
+
+const minScale = 0.5; 
+const maxScale = 2; 
+
+zoom.onwheel = function (e) {
+  e.preventDefault();
+  var xs = (e.clientX - pointX) / scale,
+    ys = (e.clientY - pointY) / scale,
+    delta = (e.wheelDelta ? e.wheelDelta : -e.deltaY);
+
+  if (delta > 0) {
+    scale *= 1.2;
+  } else {
+    scale /= 1.2;
+  }
+
+  scale = Math.max(scale, minScale);
+  scale = Math.min(scale, maxScale);
+
+  pointX = e.clientX - xs * scale;
+  pointY = e.clientY - ys * scale;
+
+  setTransform();
+}
+
+function resetTransform() {
+  scale = 1;
+  pointX = 0;
+  pointY = 0;
+  setTransform();
+}

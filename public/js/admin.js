@@ -55,7 +55,7 @@ const displayFiles = () => {
 
   if (files.length > 0) {
     for (let i = 0; i < files.length; i++) {
-      
+
       // Kontainer dari 1 baris nama file + input tahun.
       const divFileRow = document.createElement('div')
       divFileRow.classList.add('file-row')
@@ -75,7 +75,7 @@ const displayFiles = () => {
       const inputYearCopy = inputYear.cloneNode(true);
       inputYearCopy.addEventListener('blur', (event) => onInputYearBlur(event));
       let fileYear = utils.extractYear(file.name);
-      if (fileYear){
+      if (fileYear) {
         inputYearCopy.value = fileYear;
       }
       divFileRow.appendChild(inputYearCopy);
@@ -103,7 +103,7 @@ selectProvinsi.addEventListener('change', async (event) => {
   const data = await utils.requestJson(url);
 
   // Ganti opsi kota
-  utils.fillSelectFromObjectArray(selectKota, data, 'idKota', 'namaKota');
+  utils.fillSelectKota(selectKota, data, 'idKota', 'namaKota');
 
   // Enable opsi
   selectKota.disabled = false;
@@ -156,9 +156,30 @@ formUpload.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   const formUpload = document.getElementById('form-search');
-  const data = new FormData(formUpload);
+  const formData = new FormData(formUpload);
 
-  console.log(await utils.sendToServer(data, formUpload.action));
+  formData.forEach((value, formKey) => {
+    if (formKey === "files[]") {
+      formData.delete(formKey);
+    }
+  });
+
+  //Rename file
+  const filesInput = document.getElementById('input-file');
+  const fileRows = document.querySelectorAll('.file-row');
+  fileRows.forEach(function (fileRow, index) {
+    const yearInput = fileRow.querySelector('input[type="number"]');
+    const fileInput = filesInput.files[index];
+
+    if (fileInput) {
+      const newFileName = yearInput.value + '.csv';
+      const renamedFile = new File([fileInput], newFileName, { type: fileInput.type });
+
+      formData.append('files[]', renamedFile);
+    }
+  });
+
+  console.log(await utils.sendToServer(formData, formUpload.action));
 });
 
 
