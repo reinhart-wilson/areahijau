@@ -1,7 +1,16 @@
-.file-row {
+.main-form {
     display: grid;
-    grid-template-columns: 20% 20% 20% auto;
-    margin-top: 2vh;
+    width: 40%;
+    grid-template-columns: 25% auto;
+    row-gap: 1.8vh;
+}
+
+.main-form label {
+    grid-column: 1/span 1;
+}
+
+.main-form input {
+    grid-column: 2/span 1;
 }
 
 .file-row span:first-child {
@@ -17,4 +26,3 @@
 .file-row input {
     grid-column: 3/ span 1;
 }
-

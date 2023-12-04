@@ -1,0 +1,140 @@
+:root{    
+    --height-banner: 11vh; 
+    --width-nav: 17.5vw;
+    --selected-border-width: 0.4vw;
+}
+
+a{
+    text-decoration: none;
+}
+
+#container-topnav{
+    background-color: #343434;
+    height: var(--height-banner);    
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 500;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    color:white;
+}
+
+#container-topnav img{
+    height: 55%;
+    margin-left: 2.5vw;
+}
+
+.btn-banner{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 100%;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    padding: 1.5rem;
+    box-sizing: border-box ;
+}
+
+.user-menu{
+    margin-right: 3vw;
+    border-radius: 0.3rem;
+    height: 100%;
+    display: flex;
+    justify-content:  center;
+}
+
+.btn-banner i{
+    margin-right: 0.7vw;
+}
+
+/* Sembunyikan konten dropdown secara default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 600;
+}
+
+/* Tampilkan konten dropdown saat tombol di-hover */
+.user-menu:hover .dropdown-content {
+    margin-top: 11vh;
+    display: flex;
+}
+
+.user-menu:hover .btn-banner{
+    background-color: #747474;
+}
+
+.container-menuItem{
+    color: black;
+    padding: 0.8rem;
+}
+
+/* ========================================================================= */
+
+#container-leftnav {
+    height: 100%;
+    width: var(--width-nav);
+    position: fixed;
+    top: 11vh;
+    left: 0;
+    z-index: 100;
+    background-image: linear-gradient(to right bottom, #28b487, #82d275);
+    color: white;
+}
+
+#container-leftnav .container-btns{
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#container-leftnav .btn-nav{
+    /* margin: 2rem;
+    display: grid;
+    grid-template-columns: 20% 80%; */
+    color: white;
+    height: 2vh;
+    padding: 1rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    padding-left: var(--selected-border-width);
+    border-left: var(--selected-border-width) solid rgba(255, 255, 255, 0);
+}
+
+.btn-nav i{
+    width: 23%;
+    align-self: center;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.selected{
+
+}
+
+.btn-nav span{
+    display: block;
+    width: 77%;
+    align-self: start;
+    text-align: left;
+    padding: 0 0.5vw 0 0.3vw;
+}
+
+#container-leftnav .selected{
+    border-left: var(--selected-border-width) solid white;
+}
+
+#container-content{
+    margin-top: calc(var(--height-banner) + var(--widget-spacing));
+    margin-left: calc(var(--width-nav) + var(--widget-spacing));
+}

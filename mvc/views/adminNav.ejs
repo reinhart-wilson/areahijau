@@ -1,0 +1,34 @@
+<div id="container-topnav">
+    <img src="/img/logo-admin.png" alt="Logo HijauID">
+
+    <div class="container-btn user-menu">
+        <div class="btn-banner btn-profile">
+            <i class="fa-solid fa-user"></i>
+            <span><%- firstname %></span>
+        </div>
+
+        <div class="dropdown-content">
+            <a href="\logout">
+                <div class="container-menuItem">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Keluar</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div id="container-leftnav" class="">
+    <div class="container-btns">
+        <a href="/admin" class="btn-nav <%= selected==="unggah" ? ' selected' : '' %>">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Unggah Berkas Peta</span>
+        </a>
+
+        <a href="/admin/buatAkun" class="btn-nav <%= selected==="buatAkun" ? ' selected' : '' %>">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Buat Akun Admin</span>
+        </a>
+    </div>
+</div>

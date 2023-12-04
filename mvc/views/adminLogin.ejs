@@ -1,31 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log In</title>
-    <link rel="stylesheet" href="/css/Login.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+    <script src="https://kit.fontawesome.com/6c886108a2.js" crossorigin="anonymous"></script> <!-- fontawesome -->
     <script src="/js/adminLogin.js" type="module" defer></script>
 </head>
+
 <body>
     <div class="kotak_login">
-		<p class="tulisan_login">Log In</p>
- 
-		<form id="login-form" method="post" action="/login">
-			<input type="text" name="username" class="form_login" placeholder="USERNAME">
- 
-			<input type="password" name="password" class="form_login" placeholder="PASSWORD">
-            
-            <br><br>
-            <% if (validationError) { %>
-                <div class="form-error">Invalid username or password</div>
-            <% } %>
-            
-			<input type="submit" class="tombol_login" value="SUBMIT">
- 
-		</form>
-		
-	</div>
+
+        <img src="/img/logo.png" alt="Logo">
+
+        <!-- <div class="sep-content"></div> -->
+
+        <div id="container-sambutan">
+            <h2>Selamat Datang, Admin!</h2>
+            <p>Silahkan login untuk melanjutkan.</p>
+        </div>
+
+        <form id="login-form" method="post" action="/login">
+            <div class="container-input">
+                <div class="container-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <input type="text" name="username" class="form_login login-input" placeholder="USERNAME">
+            </div>
+
+            <div class="container-input">
+                <div class="container-icon">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <input type="password" name="password" class="form_login login-input" placeholder="PASSWORD">
+            </div>
+
+            <div class="form-error">
+                <% if (validationError) { %>
+                    Invalid username or password
+                    <% } %>
+            </div>
+
+            <input type="submit" class="tombol_login btn-decorated" value="MASUK">
+
+        </form>
+
+
+    </div>
+    <!--  -->
+    <img src="/img/circles-darkgreen-solid.png" alt="circles top right" class="circles-solid" id="circles-topright-1">
+    <img src="/img/circles-darkgreen-solid.png" alt="circles top right" class="circles-solid" id="circles-topright-2">
+    <img src="/img/circles-darkgreen-solid.png" alt="circles bottom right" class="circles-solid" id="circles-botright">
+    <img src="/img/circles-darkgreen.png" alt="circles top left" class="circles" id="circles-topleft-1">
+    <img src="/img/circles-lightgreen.png" alt="circles top left" class="circles" id="circles-topleft-2">
+
+    <div class="btn-decorated" id="container-back">
+        <i class="fa-solid fa-house"></i>
+    </div>
 </body>
+
 </html>

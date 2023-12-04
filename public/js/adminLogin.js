@@ -4,6 +4,8 @@ const submitButton = document.querySelector(".tombol_login");
 const usernameField = document.querySelector('[name="username"]');
 const passwordField = document.querySelector('[name="password"]');
 const loginForm = document.getElementById("login-form");
+const divFormError = document.getElementsByClassName('form-error')[0]
+const btnBack = document.getElementById("container-back");
 
 const isMoreThan8Chars = (str) => {
     if (str.length < 8) {
@@ -26,13 +28,18 @@ loginForm.addEventListener("submit", async (event) => {
             const response = await utils.sendToServer(accountInfo, "/login");
             const message = await response.text();
             if (response.status === 200) {
-                alert("Login berhasil. Anda akan diarahkan ke halaman admin.");
-                window.location.href = "/admin";                
+                window.location.href = "/admin";
             } else {
-                return alert(message);
-            }            
+                divFormError.innerHTML = 'Username atau password salah!'
+            }
         } catch (e) {
             console.log(e);
         }
     }
+
+    
 });
+
+btnBack.addEventListener("click", (event) => {
+    window.location.href = "/";
+})

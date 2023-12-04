@@ -5,12 +5,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/perbandingan.css">
-    <link rel="stylesheet" href="/css/admin.css">
-    <script type="module" src="/js/admin.js" defer></script>
-
+    <title>Unggah Berkas Peta | HijauID Admin</title>
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/adminUnggah.css">
+    <link rel="stylesheet" href="/css/adminNav.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://kit.fontawesome.com/6c886108a2.js" crossorigin="anonymous"></script> <!-- fontawesome -->    
+    <script type="module" src="/js/admin.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script> -->
@@ -19,19 +21,30 @@
 </head>
 
 <body> 
-    <form class="box" id='form-search' enctype="multipart/form-data" method="post" action="/admin/mapUploadMultiple">
-        <h2>Tambah File</h2>
+    <%- include('./adminNav.ejs'); %>
 
-        <%- include('./searchForm.ejs'); %>
+    <div class="box" id="container-content">
+        <h2>UNGGAH BERKAS PETA</h2>
+        
+        <div class="sep-content"></div>
 
-        <label for="input-file">Select files:</label>
-        <input type="file" id="input-file" name="files[]" accept=".csv" multiple>
+        <form id='form-search' enctype="multipart/form-data" method="post" action="/admin/mapUploadMultiple">
+    
+            <div class="main-form">
+                <%- include('./searchForm.ejs'); %>
+        
+                <label for="input-file">Pilih Berkas</label>
+                <input type="file" id="input-file" name="files[]" accept=".csv" multiple>
+            </div>
 
-        <div id="container-file-path"></div>
+            <h3>Isi Data Tahun</h3>
+            <div id="container-file-path">
+                -- SILAHKAN PILIH BERKAS TERLEBIH DAHULU --
+            </div>
 
-        <input name="btn-submit" type="submit" disabled="true">
-    </form>
-    <button class="btn-logout">Logout</button>
+            <input name="btn-submit" type="submit" disabled="true" class="btn-decorated">
+        </form>
+    </div>
 </body>
 
 </html>

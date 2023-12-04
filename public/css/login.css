@@ -1,0 +1,138 @@
+:root {
+    --width-kotaklogin: 25vw;
+}
+
+body {
+    background-color: #d8e8de;
+    font-family: 'Inter', sans-serif;
+    height: 100%; overflow: hidden
+}
+
+.kotak_login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--width-kotaklogin);
+    margin: 0 auto;
+    position: absolute;
+    top: 12%;
+    left: calc(50% - var(--width-kotaklogin)/2)
+}
+
+.kotak_login img {
+    width: 15vw;
+    height: auto;
+}
+
+.kotak_login .sep-content {
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 1rem;
+    background-color: #7c7c7c;
+}
+
+#container-sambutan {
+    text-align: center;
+    color: #343434;
+    margin-top: 4vh;
+    margin-bottom: 1vh;
+}
+
+#container-sambutan h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0 0 0.1rem 0;
+}
+
+#container-sambutan p {
+    font-size: 1.1rem;
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-input {
+    border: none;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    border-radius: 0px 0.35rem 0.35rem 0px;
+    background-color: whitesmoke;
+    width: 15vw;
+    outline: none;
+    box-shadow: inset -0rem 0rem 0.2rem rgba(0,0,0,0.25);
+}
+
+form .container-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2vh;
+}
+
+form .fa-solid {
+    color: whitesmoke;
+    font-size: 1.1rem;
+}
+
+form .container-icon {
+    display: flex;
+    background-color: #3C6648;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.35rem;
+}
+
+.form-error {
+    padding-top: 0.25rem;
+    padding-bottom: 0.15rem;
+    color: red;
+    height: 1.3rem;
+    margin-bottom: 0.2rem;
+}
+
+#circles-botright{
+    position: absolute;
+    top:57%;
+    width: 38vw;
+    left: -13%;
+}
+
+.circles-solid{
+    filter: drop-shadow(0.5rem 0.7rem 0.2em rgba(0,0,0,0.25))
+}
+
+#circles-topright-1{
+    position: absolute;
+    top: -23%;
+    left: 85%;
+    width: 25vw;
+}
+
+#circles-topright-2{
+    position: absolute;
+    top: 9%;
+    left: 79%;
+    width: 10.5vw;
+}
+
+#circles-topleft-1{
+    position: absolute;
+    width: 8vw;
+    top: 5%;    
+    left: 3.75%;
+}
+#circles-topleft-2{
+    position: absolute;
+    width: 6vw;
+    top: 2.6%;    
+    left: 9.3%;
+}

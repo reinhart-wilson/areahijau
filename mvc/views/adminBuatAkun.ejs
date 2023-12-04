@@ -5,38 +5,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Akun</title>
-    <link rel="stylesheet" href="/fontawesome/css/all.css">
-    <link rel="stylesheet" href="/css/Admin.css">
+    <title>Tambah Akun | HijauID Admin</title>
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/adminNav.css">
     <link rel="stylesheet" href="/css/adminBuatAkun.css">
-    <link rel="stylesheet" href="/css/perbandingan.css"> <!-- Hapus kalau sudah, untuk prototyping saja -->
-    <script type="module"  src="/js/adminBuatAkun.js" defer></script>
-    <script type="module"  src="/js/logout.js" defer></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+    <script src="https://kit.fontawesome.com/6c886108a2.js" crossorigin="anonymous"></script> <!-- fontawesome -->
+    <script type="module" src="/js/adminBuatAkun.js" defer></script>
+    <script type="module" src="/js/logout.js" defer></script>
 </head>
 
 <body>
+    <%- include('./adminNav.ejs'); %>
 
-    <main>
+    <main id="container-content">
         <article class="box">
-            <h2 id="article-title">Tambah Akun Admin</h2>
+            <h2 id="article-title">TAMBAH AKUN ADMIN</h2>
+            <div class="sep-content"></div>
             <form id="login-form" method="post" action="/admin/buatAkun">
-                <label for="nama">Nama : </label>
+                <label for="nama">Nama Lengkap</label>
                 <input type="text" name="nama" class="form_login">
 
-                <label for="username">Username : </label>
+                <label for="username">Username</label>
                 <input type="text" name="username" class="form_login">
 
-                <label for="password">Password : </label>
+                <label for="password">Password</label>
                 <input type="password" name="password" class="form_login">
 
-                <label for="email">Email :</label>
+                <label for="email">Email</label>
                 <input type="email" name="email" class="form_login">
 
-                <input type="submit" class="tombol_login" value="Save">
+                <input type="submit" class="tombol_login btn-decorated" value="Simpan">
             </form>
         </article>
-
-        <button class="btn-logout">Logout</button>
     </main>
 </body>
 

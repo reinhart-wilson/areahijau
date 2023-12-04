@@ -1,0 +1,32 @@
+:root {
+    --content-width: 60vw;
+}
+
+#container-content {
+    width: var(--content-width);
+}
+
+#login-form {
+    display: grid;
+    grid-template-columns: calc(var(--content-width)/6.5) auto;
+    row-gap: 1.8vh;
+}
+
+#login-form label {
+    grid-column: 1/span 1;
+}
+
+#login-form input {
+    grid-column: 2/span 1;
+}
+
+#login-form input[type="text"],input[type="password"] {
+    grid-column: 2/span 1;
+    width: 40%;
+}
+
+#login-form input[type="submit"] {
+    grid-column: 1/span 2;
+    width: fit-content;
+    margin: 0 auto;
+}

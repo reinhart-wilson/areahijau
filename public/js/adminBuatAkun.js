@@ -7,10 +7,28 @@ const accountForm = document.getElementById("login-form");
  * @param {Array} elements array berisi elemen yang teksnya ingin dikosongkan
  */
 const clearText = (elements) => {
-    for(let i = 0; i < elements.length; i++){
-        if(elements[i].type === "text" || elements[i].type === "password"){
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i].type === "text" || elements[i].type === "password") {
             elements[i].value = "";
         }
+    }
+}
+
+function clearForm(formId) {
+    const form = document.getElementById(formId);
+    if (form) {
+        const inputs = form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            if (
+                (input.type === 'checkbox' || input.type === 'radio') && !input.checked
+            ) {
+                return;
+            } else if (input.type !== 'submit') {
+                input.value = '';
+            }
+        });
+    } else {
+        console.error('Form not found.');
     }
 }
 
@@ -27,10 +45,11 @@ accountForm.addEventListener("submit", async (event) => {
         try {
             const response = await utils.sendToServer(accountInfo, "/admin/buatAkun");
             const message = await response.text();
-            if(response.status === 200){
-                clearInputs();
+            console.log(response.status)
+            if (response.status >= 200) {
+                clearForm(accountForm);
             }
-            return alert(message);            
+            return alert(message);
         } catch (e) {
             console.log(e);
         }

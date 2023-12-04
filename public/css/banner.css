@@ -1,6 +1,10 @@
 #nav-banner {
     font-size: 1.1em;
-    background-image: linear-gradient(#25462f, #3C6648);
+    background-image: linear-gradient(
+      to right bottom,
+      #23916e,
+      #7dd56f
+    );
     filter: drop-shadow(rgba(150, 150, 150, 30) 0em 0.1em 3px);
 
     position: fixed;
@@ -57,5 +61,5 @@
 }
 
 #nav-banner a:hover{
-    background-color: #517e5e;
+    background-color: rgba(0, 0, 0, 0.15);
 }

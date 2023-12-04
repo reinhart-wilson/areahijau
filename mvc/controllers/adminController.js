@@ -79,6 +79,7 @@ export default (app, db) => {
                 next();
             }
         };
+        // return (req, res, next) => { next(); }
     };
 
     // Fungsi untuk menghasilkan salt acak
@@ -152,6 +153,16 @@ export default (app, db) => {
         }
     }
 
+    function getFirstName(fullName) {
+        if (fullName) {
+            const words = fullName.split(' ');
+            if (words.length > 0) {
+                return words[0];
+            }
+        }
+        return '';
+    }
+
     // ========================================================================
 
     app.route("/admin")
@@ -159,6 +170,8 @@ export default (app, db) => {
         .get(async (req, res) => {
             const provinsis = await db.getProvinsis();
             res.render("admin", {
+                firstname: getFirstName(req.session.name),
+                selected: "unggah",
                 provinsis: provinsis
             });
         });
@@ -257,7 +270,10 @@ export default (app, db) => {
     app.route("/admin/buatAkun")
         .all(auth())
         .get((req, res) => {
-            res.render('adminBuatAkun');
+            res.render('adminBuatAkun', {
+                firstname: getFirstName(req.session.name),
+                selected: "buatAkun"
+            });
         })
         .post(upload.none(), async (req, res) => {
             const nama = req.body.nama ? req.body.nama : undefined;
@@ -314,6 +330,7 @@ export default (app, db) => {
                 const storedSalt = result[0].salt;
                 if (await matchPassword(password, storedSalt, storedPassword)) {
                     req.session.uid = result[0].idAdmin;
+                    req.session.name = result[0].nama;
                     return res
                         .status(200)
                         .send("Login berhasil.")
