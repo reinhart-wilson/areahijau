@@ -79,8 +79,6 @@ const divMapPlaceholder = containerZoom.getElementsByClassName('placeholder')[0]
 // ============================================================================
 // Variabel lain-lain
 
-
-
 // Warna piksel peta
 let colorTambah = 'rgb(69, 224, 255)';
 let colorKurang = "red";
@@ -186,6 +184,7 @@ const generateMap = (csvData) => {
       containerMap.appendChild(canvas);
     }
     canvasIsAdded = true;
+    tahun2Canvas.classList.add('hidden');
   }
 
 
@@ -241,8 +240,16 @@ const generateMap = (csvData) => {
 
   // Tampilkan di kontainer
   for (let canvas of canvases) {
-    canvas.style.height = 'auto';
-    canvas.style.width = '100%';
+    const canvasHeight = lastRow['y'];
+    const canvasWidth = lastRow['x'];
+    console.log(canvasHeight, canvasWidth)
+    if (canvasHeight > canvasWidth) {      
+      canvas.style.height = '100%';
+      canvas.style.width = 'auto';
+    } else {
+      canvas.style.height = 'auto';
+      canvas.style.width = '100%';
+    }
     canvas.style.imageRendering = 'pixelated';
   }
 
@@ -411,17 +418,17 @@ formSearch.addEventListener('submit', async function (event) {
 
   let luas1 = luases[tahuns.indexOf(parseInt(tahun1))];
   let luas2 = luases[tahuns.indexOf(parseInt(tahun2))];
-  tbLuas.innerText = luas1 + ' m';
-  tbLuas2.innerText = luas2 + ' m';
+  tbLuas.innerText = luas1.toLocaleString() + ' m';
+  tbLuas2.innerText = luas2.toLocaleString()+ ' m';
 
   let luasPerubahan = -1 * (parseInt(luas1) - parseInt(luas2));
-  tbPerubahan.innerText = luasPerubahan + ' m';
+  tbPerubahan.innerText = luasPerubahan.toLocaleString() + ' m';
   tbLuas.appendChild(squared.cloneNode(true));
   tbLuas2.appendChild(squared.cloneNode(true));
   tbPerubahan.appendChild(squared.cloneNode(true));
   console.log(Number(luasPerubahan) >= 0)
   if (Number(luasPerubahan) >= 0) {
-    tbPerubahan.style.color = colorTambah;
+    tbPerubahan.style.color = colorHijau;
   } else {
     tbPerubahan.style.color = colorKurang;
   }
@@ -492,8 +499,8 @@ zoom.onmousemove = function (e) {
   setTransform();
 }
 
-const minScale = 0.5; 
-const maxScale = 2; 
+const minScale = 0.5;
+const maxScale = 3;
 
 zoom.onwheel = function (e) {
   e.preventDefault();

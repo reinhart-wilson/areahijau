@@ -13,16 +13,37 @@
     grid-column: 2/span 1;
 }
 
-.file-row span:first-child {
-    grid-column: 1/ span 1;
+#container-file-path{
+    margin-bottom: 2vh;
+}
+
+.file-row{
+    display: grid;
+    grid-template-columns: min-content auto;
+    padding-bottom: 1vh;
+    padding-left: 1.5vw;
+    row-gap: 0.5vh;
+    border-left: 2px solid var(--sep-color);
+}
+
+.file-row h4{
+    grid-column: 1/span 2;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
 }
 
 .file-row span:nth-child(2) {
-    grid-column: 2/ span 1;
-    text-align: right;
+    grid-column: 1/ span 2;
+}
+
+.file-row span:nth-child(3) {
+    grid-column: 1/ span 1;
+    text-align: left;
     margin-right: 0.5em;
 }
 
 .file-row input {
-    grid-column: 3/ span 1;
+    grid-column: 2/ span 1;
+    width: 4vw;
 }

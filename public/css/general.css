@@ -50,7 +50,7 @@ body{
 }
 
 .sep-content {
-    background-color: #dcdcdc;
+    background-color: var(--sep-color);
     height: 0.1em;
     margin-bottom: 0.7em;
 }
@@ -90,6 +90,7 @@ h2 {
     --widget-spacing: 1em;
     --color-mint: #E2F0E7;
     --color-placeholder-content: #969696;
+    --sep-color: #dcdcdc;
 }
 
 body {
@@ -112,4 +113,32 @@ body {
     background-color: #dcdcdc;
     height: 0.1em;
     margin-bottom: 0.7em;
+}
+
+
+#popup-loading {
+    width: fit-content;
+    height: fit-content;
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 5vh 5vw;
+    border-radius: 0.5rem;
+}
+
+#popup-loading h3 {
+    width: fit-content;
+    font-weight: 500;
+    margin-top: 2vh;
+    margin-bottom: 0;
+}
+
+#popup-loading .tenor-gif-embed{
+    width: 10vw;
 }

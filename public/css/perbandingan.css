@@ -83,7 +83,9 @@ body {
 
 #container-map canvas {
     position: absolute;
-    border-radius: 0.2rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #canvas-kurang {
@@ -147,23 +149,6 @@ body {
 input[type="submit"] {
     width: fit-content;
 }
-#popup-loading {
-    width: 15vw;
-    height: 15vh;
-    background-color: white;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#popup-loading h2 {
-    width: fit-content;
-}
-
 
 .form-group {
     display: grid;

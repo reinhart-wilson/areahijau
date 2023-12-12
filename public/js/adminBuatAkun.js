@@ -14,8 +14,7 @@ const clearText = (elements) => {
     }
 }
 
-function clearForm(formId) {
-    const form = document.getElementById(formId);
+function clearForm(form) {
     if (form) {
         const inputs = form.querySelectorAll('input, textarea, select');
         inputs.forEach(input => {
@@ -46,7 +45,7 @@ accountForm.addEventListener("submit", async (event) => {
             const response = await utils.sendToServer(accountInfo, "/admin/buatAkun");
             const message = await response.text();
             console.log(response.status)
-            if (response.status >= 200) {
+            if (response.status >= 200 && response.status < 300 ) {
                 clearForm(accountForm);
             }
             return alert(message);

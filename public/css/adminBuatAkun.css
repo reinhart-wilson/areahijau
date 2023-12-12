@@ -1,5 +1,5 @@
 :root {
-    --content-width: 60vw;
+    --content-width: 50vw;
 }
 
 #container-content {
@@ -8,7 +8,7 @@
 
 #login-form {
     display: grid;
-    grid-template-columns: calc(var(--content-width)/6.5) auto;
+    grid-template-columns: 10vw auto;
     row-gap: 1.8vh;
 }
 

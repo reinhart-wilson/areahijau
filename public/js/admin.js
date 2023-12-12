@@ -57,13 +57,18 @@ const displayFiles = () => {
     for (let i = 0; i < files.length; i++) {
 
       // Kontainer dari 1 baris nama file + input tahun.
-      const divFileRow = document.createElement('div')
-      divFileRow.classList.add('file-row')
+      const divFileRow = document.createElement('div');
+      divFileRow.classList.add('file-row');
+
+      // Tambah subjudul per row
+      const subtitle = document.createElement('h4');
+      subtitle.innerText = "Berkas " + (i + 1);
+      divFileRow.appendChild(subtitle);
 
       // Get file name + buat span yang berisi nama file untuk preview.
       const file = files[i];
       const spanFileName = document.createElement('span');
-      spanFileName.textContent = `Nama File ${i + 1}: ${file.name}`;
+      spanFileName.textContent = `${file.name}`;
       divFileRow.appendChild(spanFileName);
 
       // Label tahun
@@ -179,7 +184,17 @@ formUpload.addEventListener('submit', async function (event) {
     }
   });
 
-  console.log(await utils.sendToServer(formData, formUpload.action));
+  try {
+    const response = await utils.sendToServer(formData, formUpload.action);
+    const message = await response.json();
+    console.log(response.status)
+    if (response.status >= 200 && response.status < 300) {
+      // clearForm(accountForm);
+    }
+    return alert(message.message);
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 

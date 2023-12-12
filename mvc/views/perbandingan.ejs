@@ -52,7 +52,7 @@
                 <p>Luas Area Hijau:
                     <ul>
                         <li>Tahun <span class="span-tahun1">1</span>: <span id="detail-luas1"></span></p></li>
-                        <li>Tahun <span class="span-tahun1">2</span>: <span id="detail-luas2"></span></p></li>
+                        <li>Tahun <span class="span-tahun2">2</span>: <span id="detail-luas2"></span></p></li>
                         <li>Perubahan : <span id="detail-perubahan"></span></li>
                     </ul>                 
             </div>
@@ -123,11 +123,7 @@
         </div>
     </article>
 
-    <div id="overlay" class="hidden">
-        <div id="popup-loading">
-            <h2>Loading...</h2>
-        </div>
-    </div>
+    <%- include('./overlayLoading.ejs'); %>
 </body>
 
 </html>
